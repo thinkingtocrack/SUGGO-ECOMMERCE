@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <%- include('../partials/bootstrap.ejs') %>
+    <link rel="stylesheet" href="/stylesheets/admin/admin_product.css">
+</head>
+<body>
+    <%- include('./partials/adminheader.ejs') %>
+    <main>
+        <%- include('./partials/sidebar.ejs') %>
+        <div class="admintable">
+            <h4>Overview</h4>
+            <div class="usersearch">
+                <input type="text" placeholder="find product">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newProduct">New Product</button>
+            </div>
+            <table class="table table-striped table-bordered" >
+                <thead>
+                <tr>
+                    <th style="width: 300px;">Product Name</th>
+                    <th style="width: 350px;">Description</th>
+                    <th style="text-align: center;">Category</th>
+                    <th style="width: 300px;"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <% data.forEach(element => { %>
+                    <tr>
+                        <td><%= element.productname %></td>
+                        <td><%= element.description %></td>
+                        <td style="text-align: center;"> <%= element.category %></td>
+                        <td>
+                            <div class="useredit" style="display: flex;justify-content:space-between;">
+                                <button class="del" onclick=<%= `deleteProduct("${element._id}")`%>><img src="/images/adminicons/trash.png" alt="deleteicon"></button>
+                                <% if(element.status){ %>
+                                    <button onclick=<%= `productStatus("${element._id}",${element.status})`%>>🟢 Published</button>
+                                <% }else{ %>
+                                    <button onclick=<%= `productStatus("${element._id}",${element.status})`%>>🔴 Un Published</button>
+                                    <% } %>
+                                <button type="button" onclick=<%= `productEdit("${element._id}")`%> >Edit</button>
+                                <button type="button" onclick=<%= `newVarient("${element._id}")`%> >New Varient</button>
+                            </div>
+                        </td>
+                    </tr>
+
+                <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+  
+  <!-- Modal for delete -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Product</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          are you sure you want to delete?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="deleteProductBtn">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- modal for status -->
+
+  <div class="modal fade" id="statusModal" tabindex="-1" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Product Status</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                <label class="form-check-label" for="flexRadioDefault1">
+                  Published
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                <label class="form-check-label" for="flexRadioDefault2">
+                  Unpublished
+                </label>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="publishStatus">Change Status</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- new product Modal -->
+
+<div class="modal fade" id="newProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">CREATE NEW PRODUCT</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" id="productform" enctype="multipart/form-data" onsubmit="return minfile('formFileMultiple1')">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Product Name</span>
+                <input required type="text" name="productname" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Price</span>
+                <input required type="number" min="0" name="price" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="inputGroupSelect01">Category</label>
+                <select required name="category" class="form-select" id="inputGroupSelect01">
+                  <option selected>Choose Category</option>
+                  <% category.forEach(element => { %>
+                    <option value="<%= element.category %>"><%= element.category %></option>
+                  <%}); %>
+                </select>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Stock</span>
+                <input required type="number" min="0" name="stock" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Brand</span>
+                <input required type="text" name="brand" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="inputGroup-sizing-default">Color</span>
+              <input required type="text" name="color" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+          </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                <textarea required name="description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlTextarea2" class="form-label">Product Details</label>
+              <textarea required name="productdetails" class="form-control" id="exampleFormControlTextarea2" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="formFileMultiple" class="form-label">Select Picture of Watch</label>
+                <input required name="testImage" class="form-control" type="file" id="formFileMultiple1" multiple accept="image/*">
+            </div>
+          </form>
+          <div id="selectedImage"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" form="productform" formaction="/admin/product/new/0" class="btn btn-secondary">Save as Draft</button>
+          <button type="submit" formaction="/admin/product/new/1" form="productform" class="btn btn-primary">Publish Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- new varient modal -->
+
+  <div class="modal fade" id="newVarient" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">CREATE NEW VARIENT</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" id="varientform" enctype="multipart/form-data" onsubmit="return minfile('formFileMultiple2')">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Price</span>
+                <input required type="number" min="0" name="price" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Stock</span>
+                <input required type="number" min="0" name="stock" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="inputGroup-sizing-default">Color</span>
+              <input required type="text" name="color" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlTextarea1" class="form-label">Product Details</label>
+              <textarea required name="productdetails" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="formFileMultiple" class="form-label">Select Picture of Watch</label>
+                <input required name="testImage" class="form-control" type="file" id="formFileMultiple2" multiple accept="image/*">
+            </div>
+          </form>
+          <div id="selectedImage2"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" form="varientform" class="btn btn-secondary newvarientbtnform">Save as Draft</button>
+          <button type="submit" form="varientform" class="btn btn-primary newvarientbtnform">Publish Varient</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- edit product -->
+  <div class="modal fade" id="editProduct" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="editModalLabel">EDIT PRODUCT</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" id="editProductform">
+            <div class="input-group mb-3">
+                <div class="input-group-text">
+                    <input class="form-check-input mt-0 x1" type="checkbox" value="productname" aria-label="Checkbox for following text input">
+                </div>
+                <span class="input-group-text" id="inputGroup-sizing-default">Product Name</span>
+                <div class="form-floating">
+                    <input id="productname" required type="text" name="productname" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    <label for="productname"></label>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-text">
+                    <input class="form-check-input mt-0 x1" type="checkbox" value="productcategory" aria-label="Checkbox for following text input">
+                </div>
+                <label class="input-group-text" for="inputGroupSelect01">Category</label>
+                <div class="form-floating">
+                    <select id="productcategory" required name="category" class="form-select" id="inputGroupSelect01">
+                    <option selected>Choose</option>
+                    <% category.forEach(element => { %>
+                        <option value="<%= element.category %>"><%= element.category %></option>
+                    <%}); %>
+                    </select>
+                    <label for="productcategory"></label>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-text">
+                    <input class="form-check-input mt-0 x1" type="checkbox" value="productbrand" aria-label="Checkbox for following text input">
+                </div>
+                <span class="input-group-text" id="inputGroup-sizing-default">Brand</span>
+                <div class="form-floating">
+                    <input id="productbrand" required type="text" name="brand" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    <label for="productbrand"></label>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-text">
+                    <input class="form-check-input mt-0 x1" type="checkbox" value="productdes" aria-label="Checkbox for following text input">
+                </div>
+                <span class="input-group-text">Description</span>
+                <div class="form-floating">
+                    <textarea id="productdes" required name="description" class="form-control" aria-label="With textarea"></textarea>
+                    <label for="productdes"></label>
+                </div>
+              </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="editvarientbtn" class="btn btn-primary" data-bs-toggle="modal">
+            Edit Varients
+          </button>
+          <button type="submit"  form="editProductform" class="btn btn-primary editproductbtnsub">Publish Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--varient show Modal -->
+<div class="modal fade" id="varienteditmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Varient Edit</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body ">
+        <div style="display: flex;gap: 10px;">
+          <div class="varientbody">
+            <form id="varientformx" method="POST" enctype="multipart/form-data"  onsubmit="return minfile('formFileMultiple3')">
+            <select name="vid" class="form-select mb-3" aria-label="Default select example">
+            </select>
+            <div class="input-group mb-3">
+              <div class="input-group-text">
+                  <input class="form-check-input mt-0 y" type="checkbox" aria-label="Checkbox for following text input">
+              </div>
+              <span class="input-group-text" id="inputGroup-sizing-default">Color</span>
+              <input required disabled type="text" name="color" class="form-control yc" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-text">
+                  <input class="form-check-input mt-0 y" type="checkbox" aria-label="Checkbox for following text input">
+              </div>
+              <span class="input-group-text" id="inputGroup-sizing-default">Price</span>
+              <input required disabled type="number" min="0" name="price" class="form-control yc" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-text">
+                  <input class="form-check-input mt-0 y" type="checkbox" aria-label="Checkbox for following text input">
+              </div>
+              <span class="input-group-text" id="inputGroup-sizing-default">Stock</span>
+              <input required disabled type="number" min="0" name="stock" class="form-control yc" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-text">
+                  <input class="form-check-input mt-0 y" type="checkbox" aria-label="Checkbox for following text input">
+              </div>
+              <span class="input-group-text">Product Details</span>
+              <textarea required name="productdetails" disabled class="form-control yc" aria-label="With textarea"></textarea>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-text">
+                  <input class="form-check-input mt-0 y" type="checkbox" aria-label="Checkbox for following text input">
+              </div>
+              <input required disabled name="testImage" class="form-control yc" type="file" id="formFileMultiple3" multiple accept="image/*">
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" name="status" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+              <label class="form-check-label" for="flexSwitchCheckDefault">Status</label>
+            </div>
+            </form>
+            <div id="selectedImage3"></div>
+          </div>
+          <div class="varientoldbody">
+            <h2>Varient Details(Current)</h2>
+            <div class="accordion " id="accordionFlushExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                    Color
+                  </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse " data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body"></div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                    Price
+                  </button>
+                </h2>
+                <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body"></div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                    Stock
+                  </button>
+                </h2>
+                <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body"></div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse4" aria-expanded="false" aria-controls="flush-collapseThree">
+                    product details
+                  </button>
+                </h2>
+                <div id="flush-collapse4" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body"></div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse5" aria-expanded="false" aria-controls="flush-collapseThree">
+                    Images
+                  </button>
+                </h2>
+                <div id="flush-collapse5" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <form id="deletevarientform">
+          <button type="submit" class="btn btn-danger">Delete Varient</button>
+        </form>
+        <button type="submit"  form="varientformx" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  <%- include('./partials/footer.ejs') %>
+
+<script src="/javascripts/admin/admin_product.js"></script>
+</body>
+</html>

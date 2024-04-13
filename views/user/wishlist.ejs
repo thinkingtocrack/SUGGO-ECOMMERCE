@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist</title>
+    <link rel="icon" href="/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/stylesheets/user/wishlist.css">
+    <%- include('../partials/bootstrap.ejs') %>
+</head>
+<body>
+    <%- include('./partials/header.ejs') %>
+    <main class="container">
+        <div class="top-cart">
+            <h1>Your Wishlist</h1>
+        </div>
+        <ul class="list-group">
+            <% if(locals.wishlist) {%>
+                <% wishlist.forEach((element,i) => { %>
+                    <li class="list-group-item list-group-item-dark removedwishlist">
+                        <div class="cartbox">
+                            <img class="cartimage" src="/uploads/<%= element.varient.image[0] %>" alt="<%= element.productname %>">
+                            <div>
+                                <h5><%= element.productname %></h5>
+                                <button type="button" onclick=<%= `removewishlist(event,'${element._id}',${element.varient.id})` %> class="btn btn-danger">Remove</button>
+                                <% if(element.status && element.varient.status){ %>
+                                <button class="btn btn-primary" onclick=<%= `addToCart(event,'${element._id}',${element.varient.id})` %>>Add to cart</button>
+                                <% }else{ %>
+                                    <h3 style="display: inline;">The product is not available</h3>
+                                <% } %>
+                            </div>
+                            <p style="font-size:large;font-weight: bold;"> Rs.<%= element.varient.price %></p>
+                        </div>
+                    </li>
+                <% }); %> 
+            <% } %>
+          </ul>
+    </main>
+    <%- include('./partials/footer.ejs') %>
+    <div style="position: fixed;bottom: 0px;right:50px;z-index: 1000;" id="liveAlertPlaceholder"></div>
+
+    <script src="/javascripts/user/wishlist.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<head>
+    <link rel="stylesheet" href="/stylesheets/admin/partials/sidebar.css">
+</head>
+<div class="navbar1">
+    <div>
+        <h2 id="admin_name">shain</h2>
+    </div>
+    <ul id="sidebar_list">
+        <li><a href="/admin">Dashboard</a></li>
+        <li><a href="/admin/product">Product</a></li>
+        <li><a href="/admin/customer">Customers</a></li>
+        <li><a href="/admin/category">Category</a></li>
+        <li><a href="/admin/order">Orders</a></li>
+        <li>Banner</li>
+        <li><a href="/admin/coupon">Coupons</a></li>
+        <li>Settings</li>
+    </ul>
+</div>
+<script>
+    let dark = <%= locals.dark %>;
+    let list=document.querySelectorAll('#sidebar_list li')
+    list[dark].style.backgroundColor='#DFDFDF'
+</script>

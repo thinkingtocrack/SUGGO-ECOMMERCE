@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon/favicon.ico" type="image/x-icon">
+    <title>Shopping</title>
+    <%- include('../partials/bootstrap.ejs') %>
+    <link rel="stylesheet" href="./stylesheets/user/shop.css">
+</head>
+<body>
+    <%- include('./partials/header.ejs') %>
+    <main>
+        <div class="main1">
+            <h1>Shop</h1>
+            <p>Today, the fashion world has evolved, and there is no just 'for men' or 'for women.' Unisex trends are topping the
+            charts, be it clothing or accessories. Men and women are both breaking the usual fashion norms and experimenting with
+            all kinds of accessories. And watches are no exception. If you too want to step out of your comfort zone, you can now go
+            for stylish branded watches from SUGGO</p>
+        </div>
+        <div class="main2">
+            <div class="main2_1">
+                <h3 style="display: inline;">Filter</h3>
+                <div >
+                    <h5>Categories</h5>
+                    <% locals.category.forEach((element,i)=>{ %>
+                    <div>
+                        <label>
+                            <input class="filtercat" type="checkbox" <% if(locals.filter.includes(element.category)){ %>checked<% } %> name="<%= element.category %>"> <%= element.category %>
+                        </label>
+                    </div>
+                    <% }) %>
+                    <input hidden type="text" form="filtersearch" name="category" id="hiddeninputx">
+
+
+                    <h5>Colors</h5>
+                    <% locals.color.forEach((element,i)=>{ %>
+                    <div>
+                        <label>
+                            <input class="filtercolor" type="checkbox" <% if(locals.colorfilter.includes(element)){ %>checked<% } %> name="<%= element %>"> <%= element %>
+                        </label>
+                    </div>
+                    <% }) %>
+                    <input hidden type="text" form="filtersearch" name="color" id="hiddeninputcolor">
+
+                    <h5>Price</h5>
+                    <div style="display: flex;flex-direction: column;">
+                        <label class="pricerangelabel" for="minprice">Min-Price:Rs.<% if(locals?.price) {%><%=price.min %><%}else{  %>0<% } %></label>
+                        <input type="range" min="0" form="filtersearch" <% if(locals?.price) {%>value='<%=price.min %>'<%}else{  %>value='0'<% } %> id="minprice" max="100000" name="minprice" class="pricerange">
+                    </div>
+                    <div style="display: flex;flex-direction: column;">
+                        <label class="pricerangelabel" for="maxprice">Max-Price:Rs.<% if(locals?.price) {%><%=price.max %><%}else{  %>100000<% } %></label>
+                        <input type="range" min="0"  form="filtersearch" max="100000" <% if(locals?.price) {%>value='<%=price.max %>'<%}else{  %>value='100000'<% } %> id="maxprice" name="maxprice" class="pricerange">
+                    </div>
+                    
+
+                    <button type="submit" form="filtersearch"  class="btn btn-dark">Apply filter</button>
+                    <a href="/shop" class="btn btn-danger">Clear Filter</a>
+                </div>
+            </div>
+            <div class="products">
+                <div class="productsdisplay">
+                    <% locals.products.forEach(element => { %>
+                        <div class="gridborder">
+                            <div >
+                                <img class="shopimage" src="uploads/<%=element.varient.image[0] %>" alt="<%= element.productname %>">
+                            </div>
+                            <a  style="text-decoration: none;color: black;display: block;font-weight: bold;" href="/shop/view/<%= element.productId %>/<%= element.varient.id %>"><p class="textoverflow"><%= element.productname %></p></a>
+                            <p style="color: gray;"><%= element.category %></p>
+                            <p>₹<%= element.varient.price %></p>
+                        </div>
+                    <% }) %>
+                </div>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                      <li class="page-item disabled">
+                        <a class="page-link">Previous</a>
+                      </li>
+                      <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                      <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
+                      <li class="page-item"><a class="page-link" href="#">3</a></li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                      </li>
+                    </ul>
+                  </nav>
+            </div>
+        </div>
+    </main>
+    <%- include('./partials/footer.ejs') %>
+    <script src="javascripts/user/shop.js"></script>
+</body>
+</html>

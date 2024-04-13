@@ -1,0 +1,8 @@
+main{
+    display: flex;
+    min-height: 100vh;
+}
+.admintable{
+    flex: 1;
+    padding: 20px;
+}

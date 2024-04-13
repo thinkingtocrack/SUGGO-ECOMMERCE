@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <link rel="icon" href="/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/stylesheets/user/user_home.css">
+    <%- include('../partials/bootstrap.ejs') %>
+</head>
+<body>
+    <%- include('../user/partials/header.ejs') %>
+
+    <main>
+        <div class='main_top'>
+            <h1>MY ACCOUNT</h1>
+            <h5>SHOP</h5>
+        </div>
+        <div class="main_bottom">
+            <%- include('./partials/userHomenav.ejs') %>
+            <div class="main_view">
+                <%- include(locals.link) %>
+            </div>
+        </div>
+    </main>
+
+
+    <%- include('../user/partials/footer.ejs') %>
+
+    <script src="/javascripts/user_home.js"></script>
+</body>
+</html>

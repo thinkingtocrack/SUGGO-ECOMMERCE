@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="icon" href="/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/stylesheets/user/signup.css">
+    <%- include('../partials/bootstrap.ejs') %>
+</head>
+<body>
+    <% if(locals.error){ %>
+        <dialog open style="background-color: black;color:white;position: absolute;top: 50vh;border-radius: 10px;z-index: 100;">
+            <p>user Already exist</p>
+            <form method="dialog">
+                <button>OK</button>
+            </form>
+        </dialog>
+        <% }%>
+    <%- include('./partials/header.ejs') %>
+    <main>
+        <form action="/user/user_registration" method="POST" onsubmit="return check()">
+            <div class="signup_box">
+                <h2>create account</h2>
+                <div class="box_input">
+                    <input type="text" required placeholder="Full Name" name="name" id="name">
+                    <input type="email" required placeholder="Email" name="email" id="email">
+                    <div>
+                        <input id="signupnumber" type="text" required name="phone" id="number" placeholder="Phone Number">
+                        <p class="checkerror" style="color: red;display: none;margin: 0;"></p>
+                    </div>
+                    <div class="password-container">
+                        <input type="password" required name="password" id="password" placeholder="Password">
+                        <button type="button" class="toggleEye" onclick="toggleEye('password')">👁️</button>
+                    </div>
+                    <div>
+                        <div class="password-container">
+                            <input type="password" required name="cpassword" id="cpassword" placeholder="Confirm Password">
+                            <button type="button" class="toggleEye" onclick="toggleEye('cpassword')">👁️</button>
+                        </div>
+                        <p class="checkerror" style="color: red;display: none;margin: 0;"></p>
+                    </div>
+                </div >
+                <input type="checkbox" name="terms" required id="checkbox" style="margin-top: 15px;">
+                <label style="display: inline;">I have read and agreed to the Terms of Service and Privacy Policy</label>
+                <div class="box_last">
+                    <button type="submit" style="display:block ;">Create Account</button>
+                    <p>Already have an account? <a href="/user/user_signin">Log In</a></p>
+                </div>
+            </div>
+        </form>
+    </main>
+    <%- include('./partials/footer.ejs') %>
+
+    <script src="/javascripts/signup.js"></script>
+</body>
+</html>

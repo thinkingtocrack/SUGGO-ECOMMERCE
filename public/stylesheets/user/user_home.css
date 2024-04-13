@@ -1,0 +1,20 @@
+main{
+    display: flex;
+    flex-direction:column ;
+}
+
+.main_top{
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: gray;
+}
+.main_bottom{
+    display: flex;
+    min-height: 100vh;
+}
+.main_view{
+    flex: 1;
+}

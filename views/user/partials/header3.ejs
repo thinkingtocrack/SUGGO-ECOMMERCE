@@ -1,0 +1,63 @@
+<head>
+    <style>
+        .top_offer{
+            background-color: black;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            color: white;
+            align-items: center;
+            padding: 0 10px 0 10px;
+        }
+        header a{
+            text-decoration: none;
+            color: black;
+            font-size: large;
+        }
+        .navbarx{
+            padding-left: 0;
+        }
+
+    </style>
+</head>
+<header>
+    <div class="top_offer">
+        <h5 style="flex: 1;text-align: center;">FREE SHIPPING ON ALL FOSSIL WATCHES! FEB. 25–28.</h5>
+        <h5 >Support</h5>
+    </div>
+
+    <div style="height: 60px;display: flex;align-items: center;padding:0 5% 0 5%;">
+        <div style="flex:1">
+            <ul style="display: flex;gap: 20px;margin: 0;" class="navbarx">
+                <li>SUGGO</li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="">About</a></li>
+                <li><a href="">Contact Us</a></li>
+            </ul>
+        </div>
+        <div style="display: flex;align-items: center;">
+            <span>
+                <form action="/shop" id="filtersearch" onsubmit="filter()" class="d-flex" role="search">
+                <input class="form-control me-2" name="search" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </span>
+            <div style="display: flex;justify-content: center;margin-left: 10px;">
+                    <% if(locals.cartnum){ %>
+                        <button style="background-color: white;border: none;">👜<%=cartnum %></button>
+                    <% }else{%>
+                         <a href="">👜 0</a>
+                    <% } %>
+                    <span style="margin-left: 10px;">
+                        <% if(locals.auth) {%>
+                            <a href="/user/user_logout" style="text-decoration: none;">Signout</a>
+                        <% }else{ %>
+                            <a href="/user/user_signin" style="text-decoration: none;">login</a>
+                        <% } %>
+                    </span>
+                </div>
+        </div>
+    </div>
+    <hr style="margin: 0;">
+</header>

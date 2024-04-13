@@ -1,0 +1,122 @@
+.imgzoomx{
+    width: 500px;
+    height: 500px;
+}
+#zoom{
+    display: none;
+    width: 250px;
+    height: 250px;
+    border: solid 1px black;
+    position: absolute;
+}
+.img-container{
+    padding: 20px;
+}
+main{
+    background-color: rgb(233, 233, 233);
+    padding: 0px 40px 10px 40px;
+}
+.submain{
+    background-color: rgb(233, 233, 233);
+    padding: 5px 90px 15px 90px;
+    display: flex;
+    gap:2px
+}
+.productimage{
+    background-color: white;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+.product{
+    background-color: white;
+    width: 100%;
+    padding: 15px 30px 15px 30px;
+    border-radius: 0 10px 10px 0;
+}
+.disbut:disabled{
+    opacity: 1;
+}
+.productsubimage{
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 120px 120px 120px;
+    place-content: center;
+    width: 100%;
+    padding: 0 50px 20px 50px;
+}
+.imgsmall{
+    width: 120px;
+    height: 120px;
+}
+.breadx{
+    padding-top: 20px;
+    padding-left: 90px;
+}
+.breadx a{
+    text-decoration: none;
+    color: black;
+}
+.submain2{
+    padding: 0 90px 0 90px;
+    background-color: rgb(233, 233, 233);
+    display: flex;
+    gap: 2px;
+}
+.review-main{
+    flex: 1.6;
+    background-color: white;
+    padding: 10px 20px 10px 20px;
+    border-radius: 10px 0 0 10px;
+}
+.productdetails{
+    flex: 1;
+    background-color: white;
+    padding: 10px 20px 10px 20px;
+    border-radius: 0 10px 10px 0;
+}
+.ratespan{
+    position:absolute;
+    background-color: rgb(0, 147, 0);
+    display: inline-block;
+    height: 40px;
+    padding: 0 10px 0 10px;
+    top: 9px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 290px;
+    border-radius: 10px;
+}
+.ratespan p{
+    margin: 0;
+    padding: 0;
+    font-size: x-large;
+    font-weight: bold;
+    color: white;
+}
+.ratestar input{
+    display:none;
+}
+.ratestar label{
+    font-size: 50px;
+}
+.ratestar label{
+    color: black;
+}
+.ratestar input:checked +label ~label{
+    color: rgb(163, 163, 163);
+}
+.reviewlist{
+    background-color: rgb(231, 231, 231);
+}
+.similarproduct{
+    padding: 0 90px 0 90px;
+    background-color: rgb(233, 233, 233);
+}
+.similarproduct div{
+    margin-top: 10px;
+    background-color: white;
+    padding: 10px 20px 10px 20px;
+    border-radius: 10px;
+    display: flex;
+}

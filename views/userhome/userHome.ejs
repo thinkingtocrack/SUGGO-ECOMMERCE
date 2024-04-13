@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <link rel="icon" href="/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/stylesheets/user/userHome.css">
+    <%- include('../partials/bootstrap.ejs') %>
+</head>
+<body>
+    <%- include('../user/partials/header.ejs') %>
+
+    <main>
+        <div class='main_top'>
+            <h1>MY ACCOUNT</h1>
+            <h5>SHOP</h5>
+        </div>
+        <div class="main_bottom">
+            <div class="main_nav">
+                <li>
+                    <ul><button class="focusbutton" onclick="select(0)">dashboard</button></ul>
+                    <ul><button class="focusbutton" onclick="select(1)">order</button></ul>
+                    <ul><button class="focusbutton" onclick="select(2)">Favorite</button></ul>
+                    <ul><button class="focusbutton" onclick="select(3)">Address</button></ul>
+                    <ul><button class="focusbutton" onclick="select(4)">Account Details</button></ul>
+                    <ul><button class="focusbutton" onclick="select(5)">Signout</button></ul>
+                </li>
+            </div>
+            <div class="main_view">
+                <div class="main_dashboard dash">
+                    <div>
+                     <p>Hello User<br>
+                    From your account dashboard you can view your recent order manage your shipping and billing addresses, and edit your password and account details.</p>   
+                    </div>
+                </div>
+                <div class="main_order dash">
+                    
+                </div>
+                <div class="main_wishlist dash">
+                    <h1>wishlist</h1>
+                </div>
+                <div class="main_address dash">
+                    <%- include('../userhome/address.ejs') %>
+                </div>
+                <div class="main_accountdetails dash">
+                    <%- include('../userhome/user.ejs') %>
+                </div>
+                <div class="signout dash">
+                    <h1>signout</h1>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <%- include('../user/partials/footer.ejs') %>
+
+    <script src="/javascripts/userHome.js"></script>
+</body>
+</html>

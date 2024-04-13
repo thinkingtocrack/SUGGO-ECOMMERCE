@@ -1,0 +1,29 @@
+.navbar1 ul{
+    margin: 20px 0 0 0;
+    padding: 0;
+}
+.navbar1 li{
+    width: 99%;
+    padding: 9px;
+    padding-left: 10px;
+    border-radius: 10px;
+}
+.navbar1{
+    padding-left: 2%;
+    border-right: solid 1px gray;
+    flex: .2;
+}
+#sidebar_list a{
+    text-decoration: none;
+    color: black;
+    font-size:larger ;
+    font-weight: bold;
+}
+#admin_name{
+    font-weight: bolder;
+    border: solid 1px rgb(255, 0, 0);
+    width: 100%;
+    display: inline;
+    padding: 0;
+    margin: 0;
+}

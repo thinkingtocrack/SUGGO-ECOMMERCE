@@ -1,0 +1,231 @@
+<div style="padding: 20px 30px 20px 30px;">
+    <div style="display: flex;justify-content: space-between;align-items: center;">
+        <h4>Address</h4>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop1">Add new address</button>
+    </div>
+    <hr>
+    <div>
+          <% if(locals?.address.length>0){ %>
+              <% locals.address.forEach((element,i) => { %>
+                <div class="card text-bg-secondary mb-3" style="max-width: 18rem;">
+                  <div class="card-header">Address:<%= i+1 %></div>
+                  <div class="card-body addressbody">
+                    <p><strong>Fullname:</strong><%= element.address.fullname %></p>
+                    <p><strong>Address:</strong><%= element.address.address %></p>
+                    <p><strong>City:</strong><%= element.address.city %></p>
+                    <p><strong>State:</strong><%= element.address.state %></p>
+                    <p><strong>Zipcode:</strong><%= element.address.zip %></p>
+                    <button onclick=<%= `editAddress(event,${element.address.id})` %>   class="btn btn-primary">✏️Edit</button>
+                    <button onclick=<%= `deleteAddress(event,${element.address.id})` %> class="btn btn-danger">🗑️Delete</button>
+                  </div>
+                </div>
+              <% }); %>
+          <% } %>
+    </div>
+</div>
+
+<!-- Button trigger modal -->
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="row g-3" id="newaddress" method="POST" action="/user/account/address/addnewaddress">
+                <div class="col">
+                    <input type="text" required class="form-control" name="firstname" placeholder="First name" aria-label="First name">
+                </div>
+                <div class="col">
+                    <input type="text" required class="form-control" name="lastname" placeholder="Last name" aria-label="Last name">
+                </div>
+                <div class="col-12">
+                  <label for="inputAddress" class="form-label">Address</label>
+                  <input type="text" required name="address" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                </div>
+                <div class="col-md-6">
+                  <label for="inputCity" class="form-label">City</label>
+                  <input name="city" required type="text" class="form-control" id="inputCity">
+                </div>
+                <div class="col-md-4">
+                  <label for="inputState" class="form-label">State</label>
+                  <select required name='state' id="inputState" class="form-select">
+                    <option selected>Choose...</option>
+                    <option>Andhra Pradesh</option>
+                    <option>Arunachal Pradesh</option>
+                    <option>Assam</option>
+                    <option>Bihar</option>
+                    <option>Chhattisgarh</option>
+                    <option>Goa</option>
+                    <option>Gujarat</option>
+                    <option>Haryana</option>
+                    <option>Himachal Pradesh</option>
+                    <option>Jharkhand</option>
+                    <option>Karnataka</option>
+                    <option>Kerala</option>
+                    <option>Madhya Pradesh</option>
+                    <option>Maharashtra</option>
+                    <option>Manipur</option>
+                    <option>Meghalaya</option>
+                    <option>Mizoram</option>
+                    <option>Nagaland</option>
+                    <option>Odisha</option>
+                    <option>Punjab</option>
+                    <option>Rajasthan</option>
+                    <option>Sikkim</option>
+                    <option>Tamil Nadu</option>
+                    <option>Telangana</option>
+                    <option>Tripura</option>
+                    <option>Uttar Pradesh</option>
+                    <option>Uttarakhand</option>
+                    <option>West Bengal</option>
+                    <option>Andaman and Nicobar Islands</option>
+                    <option>Chandigarh</option>
+                    <option>Dadra and Nagar Haveli and Daman and Diu</option>
+                    <option>Delhi</option>
+                    <option>Lakshadweep</option>
+                    <option>Puducherry</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label for="inputZip" class="form-label">Zip</label>
+                  <input required name="zip" type="text" class="form-control" id="inputZip">
+                </div>
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" form="newaddress" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<!-- delete button modal -->
+<div class="modal fade" id="deleteaddressmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deleteModalLabel">Delete Address</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>are you sure you want to delete the address</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a id="deletelink" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- edit modal -->
+<div class="modal fade" id="editaddressmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deleteModalLabel">Edit Address</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="row g-3" id="editaddress" method="POST" >
+          <div class="col">
+              <input type="text" required class="form-control editaddressinput" name="firstname" placeholder="First name" aria-label="First name">
+          </div>
+          <div class="col">
+              <input type="text" required class="form-control editaddressinput" name="lastname" placeholder="Last name" aria-label="Last name">
+          </div>
+          <div class="col-12">
+            <label for="inputAddress" class="form-label">Address</label>
+            <input type="text" required name="address" class="form-control editaddressinput" id="inputAddress" placeholder="1234 Main St">
+          </div>
+          <div class="col-md-6">
+            <label for="inputCity" class="form-label">City</label>
+            <input name="city" required type="text" class="form-control editaddressinput" id="inputCity">
+          </div>
+          <div class="col-md-4">
+            <label for="inputState" class="form-label">State</label>
+            <select required name='state' id="inputState" class="form-select editaddressinput">
+              <option selected>Choose...</option>
+              <option>Andhra Pradesh</option>
+              <option>Arunachal Pradesh</option>
+              <option>Assam</option>
+              <option>Bihar</option>
+              <option>Chhattisgarh</option>
+              <option>Goa</option>
+              <option>Gujarat</option>
+              <option>Haryana</option>
+              <option>Himachal Pradesh</option>
+              <option>Jharkhand</option>
+              <option>Karnataka</option>
+              <option>Kerala</option>
+              <option>Madhya Pradesh</option>
+              <option>Maharashtra</option>
+              <option>Manipur</option>
+              <option>Meghalaya</option>
+              <option>Mizoram</option>
+              <option>Nagaland</option>
+              <option>Odisha</option>
+              <option>Punjab</option>
+              <option>Rajasthan</option>
+              <option>Sikkim</option>
+              <option>Tamil Nadu</option>
+              <option>Telangana</option>
+              <option>Tripura</option>
+              <option>Uttar Pradesh</option>
+              <option>Uttarakhand</option>
+              <option>West Bengal</option>
+              <option>Andaman and Nicobar Islands</option>
+              <option>Chandigarh</option>
+              <option>Dadra and Nagar Haveli and Daman and Diu</option>
+              <option>Delhi</option>
+              <option>Lakshadweep</option>
+              <option>Puducherry</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="inputZip" class="form-label">Zip</label>
+            <input required name="zip" type="text" class="form-control editaddressinput" id="inputZip">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button form="editaddress"  class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  <script>
+    async function deleteAddress(event,i){
+      const deleteModal = new bootstrap.Modal('#deleteaddressmodal')
+      deleteModal.show()
+      document.querySelector('#deletelink').href=`address/delete/${i}`
+    }
+    async function editAddress(event,i){
+      const editmodal =new bootstrap.Modal('#editaddressmodal')
+      editmodal.show()
+      let data=await fetch(`/user/account/address/details/${i}`)
+      data=await data.json()
+      let inputs=document.querySelectorAll('.editaddressinput')
+      let name=data.data[0].fullname.split(' ')
+      inputs[0].value=name[0]
+      inputs[1].value=name[1]
+      inputs[2].value=data.data[0][inputs[2].name]
+      inputs[3].value=data.data[0][inputs[3].name]
+      inputs[4].value=data.data[0][inputs[4].name]
+      inputs[5].value=data.data[0][inputs[5].name]
+      const form=document.querySelector('#editaddress')
+      form.action=`/user/account/address/edit/${i}`
+    }
+  </script>

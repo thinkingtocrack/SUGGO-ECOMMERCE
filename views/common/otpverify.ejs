@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <%- include('../partials/bootstrap.ejs') %>
+    <link rel="stylesheet" href="/stylesheets/common/otp.css">
+</head>
+<body>
+    <%- include('../user/partials/header.ejs') %>
+    
+        <% if(locals.otperr){ %>
+            <dialog open style="background-color: black;color:white;position: absolute;top: 50vh;border-radius: 10px;">
+                <p>wrong OTP</p>
+                <form method="dialog">
+                    <button>OK</button>
+                </form>
+            </dialog>
+        <% }%>
+
+        <main>
+            <div class="otp" style="display: flex;justify-content: center;align-items: center;">
+                <form action="<%= otpaddress %>"  onsubmit="otpcheck(event)">
+                    <div style="display: flex;flex-direction: column;gap:10px;align-items: center;">
+                        <h1 style="text-align: center;">Enter OTP</h1>
+                        <div style="position: relative;">
+                            <input style="height: 30px;border-radius: 7px;" type="password" name="otp" id="otp" placeholder="otp">
+                            <button type="button" id="password-eye" onclick="toggleEye()">👁️</button>
+                        </div>
+                        <div style="display: flex;justify-content: space-between;width: 100%;align-items: center;">
+                            <p id="time" style="color: rgb(17, 0, 255);margin: 0;">resend OTP in 00:<%= otpwait %></p>
+                            <button class="btn btn-dark" type="button" onclick="handleresend()" style="display: none;" id="resend" disabled>resend</button>
+                        </div>
+                        <button  style="border-radius: 8px;width: 80px;" type="submit">submit</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <%- include('../user/partials/footer.ejs') %>
+
+        <script>
+            handleresend()
+            function timer(a,b) {
+                let t = Math.floor(a)-1
+                const resend = document.querySelector('#resend')
+                const time = document.querySelector('#time')
+                if(b){
+                    resend.style.display = 'none'
+                    time.innerHTML = `resend OTP in 00:${t+1}`
+                }
+                time.style.display = 'block'
+                const timer = setInterval(() => {
+                    time.innerHTML = `resend OTP in 00:${t}`
+                    t--
+                    if (t < 0) {
+                        clearInterval(timer)
+                        time.style.display='none'
+                        resend.style.display = 'block'
+                        resend.disabled = false
+                    }
+                }, 1000);
+            }
+            timer(<%= otpwait %>)
+    
+            async function handleresend(){
+                const resend = document.querySelector('#resend')
+                resend.disabled = true
+                const data=await fetch('/otpverification/sendotp/<%= id%>')
+                const response=await data.json()
+                timer(response.wait,true)
+            }
+    
+            async function otpcheck(event){
+                event.preventDefault()
+                const otpinput=document.querySelector('#otp').value
+                if(isNaN(otpinput) || otpinput.length==4){
+                    const response = await fetch('/otpverification/user/<%= id%>', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: new URLSearchParams({
+                            otp: otpinput
+                        })
+                    })
+                    const check = await response.json()
+                    console.log(check)
+                    if (check.otp) {
+                        window.location.href = '/user/user_signin'
+                    } else {
+                        alert('incrroct otp')
+                    }
+                }else{
+                    alert('OTP should be 4 digit number')
+                }
+            }
+
+
+            function toggleEye(){
+            const p=document.getElementById('otp')
+            p.type= (p.type==='text')?'password':'text'
+        }
+    
+        </script>
+
+    
+
+</body>
+</html>

@@ -1,0 +1,194 @@
+<head>
+    <style>
+        .divborder{
+            border: solid 2px black;
+            padding: 5px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<div style="padding: 10px;display: flex;gap: 20px;">
+    <div class="divborder">
+        <h1>Shipping address</h1>
+        <% if(locals.info?.address){ %>
+            <p>name:<%= info.address.fullname %></p>
+            <p>address:<%= info.address.address %></p>
+            <p>city:<%= info.address.city %></p>
+            <p>state:<%= info.address.state %></p>
+            <p>pincode:<%= info.address.pincode %></p>
+        <% } %>
+    </div>
+    <div class="divborder">
+        <h1>Items</h1>
+        <ul class="list-group">
+            <% info.items.forEach((e)=>{ %>
+                <li class="list-group-item"><%=e.productname+" "+ e.varient.color%></li>
+            <% }) %>
+        </ul>
+    </div>
+    <div class="divborder">
+        <h1>Total price</h1>
+        <p>Total Amount:Rs.<%= info.paymentamount %></p>
+        <h5>payment status</h5>
+        <% if(!info.status.payment && info.paymentmethod=='online'){ %>
+            <button class="btn btn-warning" onclick=<%= `paymentpending('${info.order}')` %>>Pending</button>
+        <% }else{ %>
+            <div>
+                <div style="background-color: green;display: inline-block;padding: 4px;border-radius: 10px;">
+                    <p>completed</p>
+                </div>
+            </div>
+        <% } %>
+    </div>
+    <div class="divborder">
+        <%if(info.status.order){ %>
+            <%if(info.status.return.done){ %>
+                <p>The order has been returned.The funds will be deposited to your wallet</p>
+                <p><strong>Reason:</strong><%= info.status.return.reason %></p>
+            <% }else{ %>    
+            <button onclick=<%= `returnOrder(event,${info.order})` %> class="btn btn-warning">return</button>
+            <button  onclick=<%= `cancelOrder(event,'${info.id}')` %> class="btn btn-danger">Cancel</button>
+            <% } %>
+        <% }else{ %>
+            <p style="color: red;">the order has been cancelled the fund will be credited to your wallet</p>
+        <% } %>
+        <div>
+            <a href=<%= `/user/account/order/invoice/${info.order}` %> class="btn btn-secondary mt-1" >download recipt</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- cancel order modal -->
+<div class="modal fade" id="cancelordermodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">Cancel Order</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <div class="modal-body">
+                    <p>are you sure you want to Cancel the order</p>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="cancellink" class="btn btn-danger">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- return order modal -->
+<div class="modal fade" id="returnOrderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">Return Order</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <form id="returnOrderForm" method="POST" >
+                    <div style="padding: 10px;">
+                        <h5>Reason for return</h5>
+                        <div class="input-group">
+                            <span class="input-group-text">Reason</span>
+                            <textarea class="form-control" name="reason" aria-label="With textarea"></textarea>
+                        </div>
+                    </div>
+                </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button form="returnOrderForm" class="btn btn-danger">Return</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    async function cancelOrder(e,i){
+        const cancelOrderModal = new bootstrap.Modal('#cancelordermodal')
+        cancelOrderModal.show()
+        let a=document.querySelector('#cancellink')
+        a.onclick=async (e)=>{
+            await cancelOrderfetch(i)
+        }
+    }
+    async function cancelOrderfetch(i){
+        let a=await fetch(`/user/account/order/cancel/${i}`)
+        a=await a.json()
+        if(a.order_cancelled){
+            location.reload()
+        }
+    }
+
+    async function returnOrder(e,i){
+        const returnOrderModal = new bootstrap.Modal('#returnOrderModal')
+        returnOrderModal.show()
+        let a=document.querySelector('#returnOrderForm')
+        a.action= `/user/account/order/return/${i}`
+    }
+</script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+    async function paymentpending(a){
+        let data=await fetch(`/user/order/pending/orderdata/${a}`)
+        data=await data.json()
+        openpay(data)
+    }
+
+    function openpay(data){
+        var options = {
+            "key": "rzp_test_TREdDxWxdFJkyI", // Enter the Key ID generated from the Dashboard
+            "amount": `${data.amount}`, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "SUGO", //your business name
+            "description": "Test Transaction",
+            "image": "/favicon/favicon.ico",
+            "order_id": `${data.id}`, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response){
+                response.orderid=data.receipt
+                payverifiy(response)
+            },
+            "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+                "name": `${data.user.name}`, //your customer's name
+                "email": `${data.user.email}`, 
+                "contact": `${data.user.phone}`  //Provide the customer's phone number for better conversion rates 
+            },
+            "notes": {
+                "address": "SUGO Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            },
+            "modal": {
+                "ondismiss": function(){
+                    location.href=`/user/account/order/${data.receipt}`
+                }
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+        rzp1.on('payment.failed', function (response){
+            console.log(response.error.metadata.order_id)
+        });
+    }
+async function payverifiy(data){
+    let paymentStatus=await fetch('/auth/paymentverify',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    paymentStatus=await paymentStatus.json()
+    if(paymentStatus.status){
+        location.href=`/user/account/order/${data.orderid}`
+    }else{
+        alert('payment failed')
+    }
+
+}
+</script>

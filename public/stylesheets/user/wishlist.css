@@ -1,0 +1,18 @@
+main{
+    padding-top: 50px;
+}
+.top-cart{
+    padding: 10px 0 30px 0;
+}
+.cartimage{
+    height: 200px;
+    width: 200px;
+}
+.cartbox{
+    display: grid;
+    grid-template-columns: .5fr 2fr .2fr;
+}
+.removedcart {
+    opacity: 1;
+    transition: opacity 1s ease-out;
+}

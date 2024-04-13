@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon/favicon.ico" type="image/x-icon">
+    <title>Cart</title>
+    <link rel="stylesheet" href="/stylesheets/user/cart.css">
+    <%- include('../partials/bootstrap.ejs') %>
+</head>
+<body>
+    <%- include('./partials/header.ejs') %>
+    <main class="container">
+        <div class="top-cart">
+            <h1>Your Cart</h1>
+        </div>
+        <div class="cart-list">
+            <ul class="list-group" style="flex: 2;">
+                <% if(locals.cartlist) {%>
+                    <% cartlist.forEach((element,i) => { %>
+                        <li class="list-group-item list-group-item-dark removedcart">
+                            <div class="cartbox">
+                                <img class="cartimage" src="/uploads/<%= element.varient.image[0]%>" alt="<%= element.productname %>">
+                                <div>
+                                    <h5><%= element.productname %></h5>
+                                    <button type="button" onclick=<%= `removecart(event,'${element._id}',${element.varient.id})` %> class="btn btn-danger">Remove</button>
+                                    <% if(element.varient.status && element.status){ %>
+                                    <label for="qty">Quantity</label>
+                                    <select onchange=<%= `qtychange(event,'${element._id}',${element.varient.id})` %> name="qty" class="qty">
+                                        <% for(j=1;j<=10;j++){ %>
+                                            <option <% if(locals.cartqtylist[i]==j){ %><%= 'selected' %><% } %> value="<%= j %>"><%= j %></option>
+                                        <% } %>
+                                    </select>
+                                    <% }else{ %>
+                                        <h1>the product is not available</h1>
+                                    <% } %>
+                                </div>
+                                <p class='price' style="font-size:large;font-weight: bold;"> Rs.<%= element.varient.price %></p>
+                            </div>
+                        </li>
+                    <% }); %> 
+                <% } %>
+            </ul>
+            <div class="cart-totalprice">
+                <div style="box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.5);padding: 10px;border-radius: 10px;">
+                    <h5>Price Details</h5>
+                    <hr>
+                    <table class="table table-borderless">
+                        <tr>
+                            <td >Price(<%= locals.cartlist.length %> items)</td>
+                            <td id="totalprice"></td>
+                        </tr>
+                        <tr>
+                            <td>Delivery Charges(free for above Rs.1000)</td>
+                            <td id="delcharge"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><hr></td>
+                        </tr>
+                        <tr>
+                            <td>Total</td>
+                            <td id="totalcost"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="padding-top: 10px;display: flex;align-items: center;justify-content: center;">
+                    <a <%if(cartlist.length==0) { %>disabled href='#'<% }else{ %>href="/user/checkout?type=cart" <% } %> class="btn btn-primary" >Place Order</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div style="position: fixed;bottom: 0px;right:50px;z-index: 1000;" id="liveAlertPlaceholder"></div>
+    <%- include('./partials/footer.ejs') %>
+    <script src="/javascripts/user/cart.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon/favicon.ico" type="image/x-icon">
+    <title>Login</title>
+    <link rel="stylesheet" href="/stylesheets/user/login.css">
+    <%- include('../partials/bootstrap.ejs') %>
+</head>
+<body>
+    <%- include('./partials/header.ejs') %>
+    <% if(locals.error){ %>
+        <dialog open style="background-color: black;color:white;position: absolute;top: 50vh;border-radius: 10px;z-index: 100;">
+            <p>username or password error</p>
+            <form method="dialog">
+                <button>OK</button>
+            </form>
+        </dialog>
+    <% }%>
+    <form action="/auth/user" method="POST" onsubmit="return validateform()">
+        <section>
+            <div class="login_box">
+                <h1 style="text-align: center;">Login</h1>
+                <input type="email" name="email" placeholder="Email">
+                <div>
+                    <div class="password-container">
+                        <input type="password" id="inputPassword" name="password" placeholder="Password">
+                        <button type="button" id="password-eye" onclick="toggleEye()">👁️</button>
+                    </div>
+                    <p id="passworderror" style="color: red;display: none;margin: 0;"></p>
+                </div>
+                <a href="/user/forgot_password">forgot password</a>
+                <button style="display: block;align-self: center;" type="submit">login</button>
+                <a style="display: block;align-self: center;" href="/user/user_registration">signup</a>
+            </div>
+        </section>
+    </form>
+    <%- include('./partials/footer.ejs') %>
+    <script src="/javascripts/login.js"></script>
+</body>
+</html>

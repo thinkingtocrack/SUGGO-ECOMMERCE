@@ -1,0 +1,81 @@
+<style>
+    footer{
+        width: 100%;
+    }
+    hr{
+        border:solid 1px rgb(0, 0, 0);
+        opacity: .6;
+        width: 100%;
+    }
+    ul{
+        list-style-type: none;
+        margin-left: 20px;
+    }
+    li{
+        padding: 0;
+        margin-bottom: 5px;
+    }
+    .details{
+        width: 100%;
+        display: flex;
+        padding-top: 80px;
+        padding-bottom: 100px;
+        padding-left: 30px;
+        padding-right: 30px;
+        align-items: center;
+    }
+    .emailsend{
+        margin-left: 10%;
+        flex: 1.5;
+    }
+    @media (max-width:800px){
+        .details{
+            flex-direction: column;
+            align-items: start;
+        }
+        .emailsend{
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        
+    }
+    @media (max-width:600px){
+        .flop{
+            flex-direction: column;
+        }
+    }
+</style>
+
+<footer >
+    <hr>
+    <div class="details" >
+        <div class="emailsend">
+            <h1>signup for our letter</h1>
+            <p>Be the first to know about our special offer, news, and updates.</p>
+            <input type="text" placeholder="Email address">
+        </div>
+        <div class="flop" style="flex: 2;display: flex;">
+            <div>
+                <ul>CUSTOMER SERVICE
+                    <li>payment options</li>
+                    <li>Track order</li>
+                    <li>encricle program</li>
+                </ul>
+            </div>
+            <div>
+                <ul>CONTACT US
+                    <li>9539530392</li>
+                    <li>shaine20000@gmail.comn</li>
+                    <li>FAQ</li>
+                </ul>
+            </div>
+            <div>
+                <ul>POLICIES
+                    <li>Return and exchanges</li>
+                    <li>cancellation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div style="background-color: black;height: 50px;"></div>
+</footer>

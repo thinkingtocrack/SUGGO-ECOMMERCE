@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <%- include('../partials/bootstrap.ejs') %>
+    <link rel="stylesheet" href="/stylesheets/admin/admin_dashboard.css">
+</head>
+<body>
+    <%- include('./partials/adminheader.ejs') %>
+    <main>
+        <%- include('./partials/sidebar.ejs') %>
+        <div class="adminside" >
+            <h1>Order Report</h1>
+            <p><strong>Total Order:</strong><%= totalorder %></p>
+            <p><strong>Total Amount in Sales:Rs.</strong><%= totalamount[0].total %></p>
+            <p><strong>Total Discount in Sales:Rs.</strong><%= totaldiscount[0].total %></p>
+            <div class="chart" style="width:100%;max-width:700px">
+                <div style="display: flex;justify-content: space-between;">
+                    <select onchange="changegraph(event,false)">
+                        <option value="1">day</option>
+                        <option selected value="2">month</option>
+                        <option value="3">year</option>
+                    </select>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#downloadreportmodal">download report</button>
+                </div>
+                <canvas id="myChart"></canvas>
+            </div>
+            <div style="background-color: rgb(232, 232, 232); padding: 10px 0 10px 0;border-radius: 10px;display: flex;flex-direction: column;">
+                <div>
+                    <canvas id="topproduct" style="width:100%;max-width:600px"></canvas>
+                </div>
+                <div>
+                    <canvas id="topcategory" style="width:100%;max-width:600px"></canvas>
+                </div>
+                <div>
+                    <canvas id="topbrand" style="width:100%;max-width:600px"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <!-- download report modal -->
+    <div class="modal fade" id="downloadreportmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Report Download</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="/admin/dashboard_reportdownload" id="reportform" method="POST" onsubmit="return checkreportfrom()">
+                <div style="display: flex;flex-direction: column;gap: 10px;">
+                    <div >
+                        <label for="fromdate">from</label>
+                        <input required type="date" name="from" id="fromdate" max=<%= `${new Date().toISOString().split('T')[0]}` %>>
+                        <label for="todate">to</label>
+                        <input required type="date" name="to" id="todate" max=<%= `${new Date().toISOString().split('T')[0]}` %>>
+                    </div>
+                    <div>
+                        <label for="daterange">Sort By</label>
+                        <select name="timeframe" id="daterange">
+                            <option selected value="day">Day</option>
+                            <option value="week">week</option>
+                            <option value="month">Month</option>
+                        </select>
+                    </div> 
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" form="reportform" class="btn btn-primary">Download report</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <%- include('./partials/footer.ejs') %>
+    <script>
+        function changegraph(event,k){
+            if(k){
+                event={target:{value:2}}
+            }
+            if(Number(event.target.value)==4){
+                
+            }else{
+                fetch(`/admin/dashboard_graph?timeframe=${event.target.value}`)
+                .then(req=>req.json())
+                .then(data=>{
+                    let xValues=[]
+                    let yValues = []
+                    switch(Number(event.target.value)) {
+                        case 1:
+                            for(i=1;i<=31;i++){
+                                xValues.push(i)
+                            }
+                            for(i=0;i<31;i++){
+                                yValues.push(0)
+                            }
+                            data.data.forEach(element => {
+                                yValues[element._id-1]=element.count
+                            });
+                            break;
+                        case 2:
+                            xValues = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                            for(i=0;i<12;i++){
+                                yValues.push(0)
+                            }
+                            data.data.forEach(element => {
+                                yValues[element._id-1]=element.count
+                            });
+                            break;
+                        // More cases can be added as needed
+                        case 3:
+                            for(i=2019;i<=2030;i++){
+                                xValues.push(i)
+                                for(j=0;j<data.data.length;j++){
+                                    if(data.data[j]._id==i){
+                                        yValues.push(data.data[j].count)
+                                        break;
+                                    }else if(j==data.data.length-1){
+                                        yValues.push(0)
+                                    }
+                                }
+                            }
+                            break;
+                        } 
+                    new Chart("myChart", {
+                    type: "line",
+                    data: {
+                        labels: xValues,
+                        datasets: [{
+                        fill: false,
+                        lineTension: 0,
+                        backgroundColor: "rgba(0,0,255,1.0)",
+                        borderColor: "rgba(0,0,255,0.1)",
+                        data: yValues
+                        }]
+                    },
+                    options: {
+                        legend: {display: false},
+                        scales: {
+                        yAxes: [{ticks: {min: 0, max:2*Math.max(...yValues)}}],
+                        }
+                    }
+                });
+                })
+            }
+            
+        }
+        changegraph({},true)
+
+
+        function checkreportfrom(){
+            let to=document.querySelector('#todate')
+            let from=document.querySelector('#fromdate')
+            if(new Date(to.value)<=new Date(from.value)){
+                alert('to date should be less than from date')
+                return false
+            }else{
+                true
+            }
+        }
+    </script>
+
+    <!-- topitems script -->
+    <script>
+        getchart()
+        async function getchart(){
+            let chartid=[{id:'topcategory',name:'category'},{id:'topproduct',name:'product'},{id:'topbrand',name:'brand'}]
+            let data=await fetch('/admin/dashboard_pie')
+            data=await data.json()
+            console.log(data)
+            chartid.forEach(a=>{
+                createchart(a.id,data[a.name],a.name)
+            })
+        }
+
+        function createchart(a,b,c){
+            const xValues = b.map(e=>e._id[c])
+            const yValues = b.map(e=>e.count)
+            // const barColors = [
+            // "#b91d47",
+            // "#00aba9",
+            // "#2b5797",
+            // "#e8c3b9",
+            // "#1e7145"
+            // ];
+            const barColors=xValues.map(e=>`rgb(${Math.floor(Math.random()*256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`)
+            
+            new Chart(a, {
+            type: "pie",
+            data: {
+                labels: xValues,
+                datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+                }]
+            },
+            options: {
+                title: {
+                display: true,
+                text: `Top 10 ${c}`
+                }
+            }
+            });
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+main{
+    padding-top: 50px;
+}
+.top-cart{
+    padding: 10px 0 30px 0;
+}
+.cartimage{
+    height: 200px;
+    width: 200px;
+}
+.cartbox{
+    display: grid;
+    grid-template-columns: .5fr 2fr .2fr;
+}
+.cart-list{
+    display: flex;
+    gap: 20px;
+}
+.cart-totalprice{
+    flex:.6;
+}

@@ -1,0 +1,63 @@
+main{
+    display: flex;
+    min-height: 100vh;
+}
+.admintable{
+    flex: 1;
+    padding: 20px;
+}
+.admintable table{
+    width: 100%;
+}
+.usersearch{
+    text-align: end;
+}
+.usersearch a{
+    border: solid 1px;
+    text-decoration: none;
+    border-radius: 7px;
+    padding: 5px;
+    color: black;
+}
+.usersearch input{
+    border-radius: 7px;
+    padding: 5px;
+    border: solid 1px black;
+}
+.useredit{
+    display:flex;
+    justify-content: space-evenly;
+}
+.admintable td {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    height: 40px;
+    font-size: small;
+}
+.admintable th{
+    height: 50px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    color: rgb(78, 78, 78);
+    font-size: small;
+}
+.useredit button{
+    border-radius: 3px;
+    border: solid 1px rgb(207, 207, 207);
+    padding: 2px 7px 2px 7px;
+    background-color: white;
+}
+#status{
+    width: 300px;
+    height: 100px;
+    display: none;
+    position: absolute;
+    top:40%;
+    left:40%;
+    border:solid 1px;
+    border-radius: 7px;
+    z-index: 2;
+    background-color: gray;
+}

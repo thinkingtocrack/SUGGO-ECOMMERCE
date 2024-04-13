@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <%- include('../partials/bootstrap') %>
+    <link rel="stylesheet" href="/stylesheets/admin/admin_order.css">
+</head>
+<body>
+    <%- include('./partials/adminheader') %>
+    <main>
+        <%- include('./partials/sidebar.ejs') %>
+        <div class="admintable">
+            <h2>Orders</h2>
+            <table class="table table-bordered">
+                <tr>
+                    <th>orderID</th>
+                    <th>Email</th>
+                    <th>amount</th>
+                    <th>Payment method</th>
+                    <th>status</th>
+                </tr>
+                <% if(locals.orders){ %>
+                    <% orders.forEach(element => {%>
+                        <tr>
+                            <td><%= element.order %></td>
+                            <td><%= element.user %></td>
+                            <td><%= element.paymentamount %></td>
+                            <td><%= element.paymentmethod %></td>
+                            <td><%= element.status.order %></td>
+                            <% if(element?.status.order){ %>
+                                <td><button class="btn btn-warning" onclick=<%= `cancelform('${element.order}')` %> data-bs-toggle="modal" data-bs-target="#ordercancelmodal">cancel</button></td>
+                            <% }else{ %>
+                                <td></td>
+                            <% } %>
+                        </tr>
+                    <% }); %>
+                <% } %>
+            </table>
+        </div>
+    </main>
+<%- include('./partials/footer.ejs') %>
+
+<!-- order cancel modal -->
+<div class="modal fade" id="ordercancelmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Cancel Order</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="GET" id="cancelform"></form>
+          are you sure you want to cancel this order
+        </div>
+        <div class="modal-footer">
+          <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" form="cancelform" class="btn btn-primary">cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+    function cancelform(a){
+        let c=document.querySelector('#cancelform')
+        c.action=`/admin/order/cancel/${a}`
+    }
+</script>
+<script src="/javascripts/admin/admin_order.js"></script>
+</body>
+</html>

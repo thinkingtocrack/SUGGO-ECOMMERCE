@@ -1,0 +1,16 @@
+<head>
+    <link rel="stylesheet" href="/stylesheets/admin/partials/sidebar.css">
+</head>
+<div class="navbar1">
+    <ul id="sidebar_list">
+        <li><a href="/user/account/dashboard">Dashboard</a></li>
+        <li><a href="/user/account/order">Order</a></li>
+        <li><a href="/user/account/address">Address</a></li>
+        <li><a href="/user/account/accountdetails">Account Details</a></li>
+    </ul>
+</div>
+<script>
+    let dark = <%= locals.dark %>;
+    let list=document.querySelectorAll('#sidebar_list li')
+    list[dark].style.backgroundColor='#DFDFDF'
+</script>

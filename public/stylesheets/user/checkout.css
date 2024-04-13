@@ -1,0 +1,26 @@
+.box{
+    display: flex;
+    gap: 10px;
+    padding: 40px 0 40px 0;
+}
+.box-left{
+    flex: 1;
+}
+.box-right{
+    flex:1;
+}
+.address{
+    box-shadow: 0 0 5px 2px #ccc;
+    padding: 0 0 5px 0;
+    border-radius: 10px;
+}
+.addressul p{
+    margin: 0;
+}
+.paymentbox{
+    box-shadow: 0 0 5px 2px #ccc;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}

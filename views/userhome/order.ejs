@@ -1,0 +1,34 @@
+<div style="padding: 0 10px 0 10px;">
+    <div>
+        <h1>your orders</h1>
+    </div>
+    <div style="padding: 10px 0 10px 0;min-height: 100vh;">
+        <% if(locals?.orders) {%>
+            <% orders.forEach(element => { %>
+                <a href="order/<%= element.order %>" style="text-decoration: none;color: black;">
+                    <div style="padding: 5px 10px 5px 10px;border-radius: 5px;box-shadow: 0 0 5px 2px #ccc;background-color: white;margin: 5px 3px 5px 3px;display: flex;gap: 20px;">
+                        <div>
+                            <p><strong>Order Id:</strong><%= element.order %></p>
+                            <p><strong>Total Items:</strong><%= element.items.length %></p>
+                            <% if(!element.status.order) {%>
+                                <p style="color: red;"><strong>Status:</strong>cancelled</p>
+                            <% } %>
+                        </div>
+                        <div style="flex:1">
+                            <ul class="list-group">
+                                <% element.items.forEach((e)=>{ %>
+                                    <li class="list-group-item"><%=e.productname+" "+ e.varient.color%></li>
+                                <% }) %>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><strong>Total Price:</strong><%= element.paymentamount %></p>
+                            <P><strong>Payment Method:</strong><%= element.paymentmethod %></P>
+                            <p></p>
+                        </div>
+                    </div>
+                </a>
+            <%}); %>
+        <% } %> 
+    </div>
+</div>
