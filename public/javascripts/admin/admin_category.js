@@ -3,7 +3,7 @@ function deleteCategory(a){
     myModal.show()
     document.getElementById('deleteCategoryBtn').addEventListener('click',(e)=>{
         e.stopPropagation();
-        fetch(`http://suggo.shop/admin/category/deletecategory/${a}`)
+        fetch(`https://suggo.shop/admin/category/deletecategory/${a}`)
         .then((a)=>{
             return a.json()
         })
@@ -35,7 +35,7 @@ function categoryStatus(a,b){
         }else{
             b=false
         }
-        fetch('http://suggo.shop/admin/category/status',{
+        fetch('https://suggo.shop/admin/category/status',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

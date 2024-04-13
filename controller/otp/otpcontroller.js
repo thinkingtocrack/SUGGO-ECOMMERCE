@@ -94,7 +94,7 @@ const send_otp=async(req,res)=>{
 
 renderotp=async(req,res)=>{
     try {
-        const response = await fetch(`http://suggo.shop/otpverification/sendotp/${req.params.id}`,{method: 'GET',credentials: 'include',})
+        const response = await fetch(`https://suggo.shop/otpverification/sendotp/${req.params.id}`,{method: 'GET',credentials: 'include',})
         const otpres = await response.json()
         res.render('./common/otpverify', { otpaddress: '/', otpwait: Math.floor(otpres.wait), id: req.params.id })       
     } catch (error) {

@@ -2,7 +2,7 @@ async function removecart(event,a,c){
     let parent=event.target.parentNode
     let grand=parent.parentNode
     let ggrand=grand.parentNode
-    let b=await fetch(`http://suggo.shop/user/cart/removecart/${a}/${c}`)
+    let b=await fetch(`https://suggo.shop/user/cart/removecart/${a}/${c}`)
     b=await b.json()
     if(b?.added){
         if(b?.exists){
@@ -67,7 +67,7 @@ totalcalculator()
 
 async function addToCart(d,a,v){
     let c=d.target.value
-    let b=await fetch(`http://suggo.shop/user/cart/addtocart/${a}/${v}/${c}`)
+    let b=await fetch(`https://suggo.shop/user/cart/addtocart/${a}/${v}/${c}`)
     b= await b.json()
     if(b?.added){
         if(b?.exists){

@@ -3,7 +3,7 @@ function deleteProduct(a){
     myModal.show()
     document.getElementById('deleteProductBtn').addEventListener('click',(e)=>{
         e.stopPropagation();
-        fetch(`http://suggo.shop/admin/product/deleteproduct/${a}`)
+        fetch(`https://suggo.shop/admin/product/deleteproduct/${a}`)
         .then((a)=>{
             return a.json()
         })
@@ -35,7 +35,7 @@ function productStatus(a,b){
         }else{
             b=false
         }
-        fetch('http://suggo.shop/admin/product/status',{
+        fetch('https://suggo.shop/admin/product/status',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -150,7 +150,7 @@ pre('#selectedImage3',"#formFileMultiple3")
 
 async function productEdit(a){
     document.querySelector('#editProductform').action=`/admin/product/edit/${a}`
-    let b=await fetch(`http://suggo.shop/admin/product/edit/${a}`)
+    let b=await fetch(`https://suggo.shop/admin/product/edit/${a}`)
     b=await b.json()
     let editModal=document.querySelector('#editProduct')
     const myModal = new bootstrap.Modal(editModal, {backdrop:'static'})
@@ -213,7 +213,7 @@ function addacc(id,d){
             acc[3].innerHTML=e.productdetails
             let p=''
             e.image.forEach(x=>{
-                p+=`<img style='height:200px;width:200px'  src="http://suggo.shop/uploads/${x}" alt="">`
+                p+=`<img style='height:200px;width:200px'  src="https://suggo.shop/uploads/${x}" alt="">`
             })
             acc[4].innerHTML=p
             document.getElementById('flexSwitchCheckDefault').checked=e.status

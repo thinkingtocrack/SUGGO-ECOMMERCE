@@ -1,6 +1,6 @@
 async function removewishlist(event,a,v){
     let ggrand=event.target.parentNode.parentNode.parentNode
-    let b=await fetch(`http://suggo.shop/user/wishlist/removewishlist/${a}/${v}`)
+    let b=await fetch(`https://suggo.shop/user/wishlist/removewishlist/${a}/${v}`)
     b=await b.json()
     if(b?.added){
         if(b?.exists){
@@ -21,7 +21,7 @@ async function removewishlist(event,a,v){
 
 async function addToCart(event,a,v){
     let c=1
-    let b=await fetch(`http://suggo.shop/user/cart/addtocart/${a}/${v}/${c}`)
+    let b=await fetch(`https://suggo.shop/user/cart/addtocart/${a}/${v}/${c}`)
     b= await b.json()
     if(b?.added){
         if(b?.exists){
