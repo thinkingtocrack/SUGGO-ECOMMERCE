@@ -49,7 +49,7 @@ const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstra
 
 
 async function addwishlist(a,id){
-    let b=await fetch(`http://localhost:4000/user/wishlist/addwishlist/${a}/${id}`)
+    let b=await fetch(`http://suggo.shop/user/wishlist/addwishlist/${a}/${id}`)
     b= await b.json()
     if(b?.added){
         if(b?.exists){
@@ -64,7 +64,7 @@ async function addwishlist(a,id){
 
 async function addToCart(a,f){
     let c=document.getElementById('qty').value
-    let b=await fetch(`http://localhost:4000/user/cart/addtocart/${a}/${f}/${c}`)
+    let b=await fetch(`http://suggo.shop/user/cart/addtocart/${a}/${f}/${c}`)
     b= await b.json()
     if(b?.added){
         if(b?.exists){

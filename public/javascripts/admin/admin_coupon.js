@@ -3,7 +3,7 @@ function deleteCategory(a){
     myModal.show()
     document.getElementById('deleteCategoryBtn').addEventListener('click',(e)=>{
         e.stopPropagation();
-        fetch(`http://localhost:4000/admin/coupon/deletecoupon/${a}`)
+        fetch(`http://suggo.shop/admin/coupon/deletecoupon/${a}`)
         .then((a)=>{
             return a.json()
         })
@@ -35,7 +35,7 @@ function categoryStatus(a,b){
         }else{
             b=false
         }
-        fetch('http://localhost:4000/admin/coupon/status',{
+        fetch('http://suggo.shop/admin/coupon/status',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -64,7 +64,7 @@ function categorytouppercase(){
 
 
 async function productEdit(a){
-    let b=await fetch(`http://localhost:4000/admin/coupon/edit/${a}`)
+    let b=await fetch(`http://suggo.shop/admin/coupon/edit/${a}`)
     b=await b.json()
     let editModal=document.querySelector('#editProduct')
     const myModal = new bootstrap.Modal(editModal, {backdrop:'static'})

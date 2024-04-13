@@ -3,7 +3,7 @@ function deleteProduct(a){
     myModal.show()
     document.getElementById('deleteCustomerBtn').addEventListener('click',(e)=>{
         e.stopPropagation();
-        fetch(`http://localhost:4000/admin/customer/deleteuser/${a}`)
+        fetch(`http://suggo.shop/admin/customer/deleteuser/${a}`)
         .then((a)=>{
             return a.json()
         })
@@ -35,7 +35,7 @@ function productStatus(a,b){
         }else{
             b=false
         }
-        fetch('http://localhost:4000/admin/customer/status',{
+        fetch('http://suggo.shop/admin/customer/status',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

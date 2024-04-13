@@ -3,7 +3,7 @@ function deleteProduct(a){
     myModal.show()
     document.getElementById('deleteProductBtn').addEventListener('click',(e)=>{
         e.stopPropagation();
-        fetch(`http://localhost:4000/admin/product/deleteproduct/${a}`)
+        fetch(`http://suggo.shop/admin/product/deleteproduct/${a}`)
         .then((a)=>{
             return a.json()
         })
@@ -35,7 +35,7 @@ function productStatus(a,b){
         }else{
             b=false
         }
-        fetch('http://localhost:4000/admin/product/status',{
+        fetch('http://suggo.shop/admin/product/status',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -60,7 +60,7 @@ function productStatus(a,b){
 
 
 async function productEdit(a){
-    let b=await fetch(`http://localhost:4000/admin/product/edit/${a}`)
+    let b=await fetch(`http://suggo.shop/admin/product/edit/${a}`)
     b=await b.json()
     let editModal=document.querySelector('#editProduct')
     const myModal = new bootstrap.Modal(editModal, {backdrop:'static'})
