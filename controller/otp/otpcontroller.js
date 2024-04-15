@@ -10,18 +10,22 @@ const nodemailer = require('nodemailer');
 
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    auth: {
+    service:'gmail',
+    host:'smtp.gmail.com',
+    port:587,
+    secure:false,
+    auth:{
         user: process.env.NODEMAILER_EMAIL,
         pass: process.env.NODEMAILER_PASSWORD
     }
 });
 
+
 sendMail = async (params) => {
     try {
         let info = await transporter.sendMail({
-            from: process.env.NODEMAILER_EMAIL,
+            // from: process.env.NODEMAILER_EMAIL,
+            from: 'shaine20000@gmail.com',
             to: params.to,
             subject: 'Hello ✔',
             html: `
@@ -36,6 +40,7 @@ sendMail = async (params) => {
    </div>
     `,
         });
+        console.log(info)
         return info;
     } catch (error) {
         console.log(error);
