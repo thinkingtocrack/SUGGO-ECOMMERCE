@@ -80,11 +80,16 @@ const user_orderreturn=async(req,res)=>{
 }
 
 const order_invoice=async (req,res)=>{
-    const userx=await order.findOne({order:req.params.id})
-    let pdf=await createpdf(userx)
-    const fs=require('fs')
-    await fs.writeFileSync('./public/invoice/invoice.pdf',pdf.pdf,'base64')
-    res.download('./public/invoice/invoice.pdf')
+    try {
+        const userx=await order.findOne({order:req.params.id})
+        let pdf=await createpdf(userx)
+        const fs=require('fs')
+        await fs.writeFileSync('./public/invoice/invoice.pdf',pdf.pdf,'base64')
+        res.download('./public/invoice/invoice.pdf')   
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
 }
 
 
