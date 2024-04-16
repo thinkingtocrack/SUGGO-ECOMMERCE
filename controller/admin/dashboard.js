@@ -2,6 +2,7 @@ const category = require('../../model/category')
 const ordermodal=require('../../model/order')
 const product = require('../../model/product')
 const excel_download=require('../../utils/admin_utils')
+const pdf_download=require('../../utils/admin/admin_pdf')
 
 const dashboard_home = async(req, res) => {
     let orders=await ordermodal.find()
@@ -128,29 +129,11 @@ const dashboard_graph=async (req,res)=>{
 }
 
 const dashboard_reportdownload=async(req,res)=>{
-  let timeframe=req.body.timeframe
   let currentDate=new Date(req.body.to)
   currentDate.setHours(23);
   currentDate.setMinutes(59);
   currentDate.setSeconds(0);
   currentDate.setMilliseconds(0);
-  let prop
-  switch(timeframe) {
-    case 'day':
-      prop={$dayOfMonth:'$date'}
-      // Code to be executed if expression === value1
-      break;
-    case 'month':
-      prop={$month:'$date'}
-      break;
-    // More cases can be added as needed
-    case 'week':
-      prop={$week:'$date'}
-      break;
-    default:
-      prop={$dayOfMonth:'$date'}
-      // Code to be executed if none of the above cases are true
-  }
   let data=await ordermodal.aggregate([
     {
       $match:{
@@ -161,11 +144,13 @@ const dashboard_reportdownload=async(req,res)=>{
       }
     },
     {
-      $group: {
-        _id:prop, // Group by the month number
-        count: { $sum: 1 }, // Count the number of documents for each month
+      $project:{
+        paymentamount:1,
+        paymentmethod:1,
+        order:1,
+        date:1
       }
-    },
+    }
   ]);
   const totalamount=await ordermodal.aggregate([
     {
@@ -183,7 +168,17 @@ const discount=await ordermodal.aggregate([
       }
     }
   ])
-  await excel_download.create_excel_report(res,data,timeframe,totalamount,discount)
+  if(req.body.downloadtype=='EXCELL'){
+    await excel_download.create_excel_report(res,data,totalamount,discount)
+  }else if(req.body.downloadtype='PDF'){
+    const pdf=await pdf_download.createpdf(data,req.body,totalamount,discount)
+    const fs=require('fs')
+    let a=pdf.pipe(fs.createWriteStream('./public/report/report.pdf'));
+    pdf.end()
+    a.on('finish',function(){
+      res.download('./public/report/report.pdf')
+    })
+  }
 }
 
 module.exports={dashboard_topitems,dashboard_reportdownload,dashboard_home,dashboard_graph}

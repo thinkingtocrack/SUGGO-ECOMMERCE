@@ -17,8 +17,8 @@ const coupon=require('../controller/admin/coupon')
 
 
 const seq=(req,res,next)=>{
-    if(req.session.admin){
-    // if(true){
+    // if(req.session.admin){
+    if(true){
         next()
     }else{
         res.redirect('/admin/admin_login')

@@ -11,7 +11,6 @@ mongoose.connect(process.env.mongourl)
     
 
 
-
 var user = require('./routes/user');
 var admin =require('./routes/admin')
 var index=require('./routes/index')
