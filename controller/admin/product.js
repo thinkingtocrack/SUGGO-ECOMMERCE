@@ -66,7 +66,7 @@ const product_new_post=async(req,res)=>{
         let data = {
             varient:[{
                 id:vid,
-                price:req.body.price,
+                price:Number(req.body.price),
                 stock:req.body.stock,
                 image:arrayimage,
                 color:req.body.color,
@@ -103,7 +103,7 @@ const product_new_varient=async(req,res)=>{
         })
         let data = {
                 id:vid,
-                price:req.body.price,
+                price:Number(req.body.price),
                 stock:req.body.stock,
                 image:arrayimage,
                 color:req.body.color,
@@ -147,7 +147,7 @@ const product_editvarient=async(req,res)=>{
         })
         const updateObject = {
             ...(color !== undefined && { "varient.$.color": color }),
-            ...(price !== undefined && { "varient.$.price": price }),
+            ...(price !== undefined && { "varient.$.price": Number(price) }),
             ...(stock !== undefined && { "varient.$.stock": stock }),
             ...(productdetails !== undefined && { "varient.$.productdetails": productdetails.split(',') }),
             ...(arrayimage.length!==0 && {'varient.$.image':arrayimage}),
