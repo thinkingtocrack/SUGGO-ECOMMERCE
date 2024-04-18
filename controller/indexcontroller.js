@@ -12,6 +12,7 @@ const homepage = async (req, res) => {
 
 const shop = async (req, res) => {
     try {
+        let skip=req?.query.page?(Number(req.query.page)-1):0
         const truecategory = await category.find({ status: true }).select('category');
         let color = await product.aggregate([{$unwind:'$varient'},{$project:{'varient.color':1}}])
         color=color.map(e=>e.varient.color)
@@ -40,12 +41,15 @@ const shop = async (req, res) => {
         if (colorarray.length > 0){
             query['varient.color']={$in:colorarray}
         }
-        let products = await product.aggregate([{$unwind:'$varient'},{$match:query},{$match:{'varient.status':true}}])
+        let count = await product.aggregate([{$unwind:'$varient'},{$match:query},{$match:{'varient.status':true}}])
+        let products = await product.aggregate([{$unwind:'$varient'},{$match:query},{$match:{'varient.status':true}},{$limit:10},{$skip:skip*9}])
+        res.locals.count=count.length
         res.locals.filter=categoryarray
         res.locals.colorfilter=colorarray
         res.locals.category=truecategory
         res.locals.products = products
         res.locals.color=color
+        res
         res.locals.price={
             min:req.query?.minprice ? Number(req.query.minprice):0,
             max:req.query?.maxprice ? Number(req.query.maxprice):100000

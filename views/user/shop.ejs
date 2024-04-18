@@ -72,16 +72,13 @@
                     <% }) %>
                 </div>
                 <nav aria-label="Page navigation example">
+                    <input hidden type="number" name="page" form="filtersearch" id="paginationform">
                     <ul class="pagination justify-content-center">
-                      <li class="page-item disabled">
-                        <a class="page-link">Previous</a>
-                      </li>
-                      <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
-                      <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
-                      <li class="page-item"><a class="page-link" href="#">3</a></li>
-                      <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                      </li>
+                      <% if(locals.count>10) {%>
+                        <% for(i=1;(i<count/10+1);i++){ %>
+                            <li class="page-item"><button class="btn btn-primary" type="submit" form="filtersearch" <%= `onclick=paginationadd(${i})` %>><%= i %></button></li>
+                        <% } %>
+                      <% } %>
                     </ul>
                   </nav>
             </div>
@@ -89,5 +86,11 @@
     </main>
     <%- include('./partials/footer.ejs') %>
     <script src="javascripts/user/shop.js"></script>
+    <script>
+        function paginationadd(a){
+            let page=document.getElementById('paginationform')
+            page.value=a
+        }
+    </script>
 </body>
 </html>
